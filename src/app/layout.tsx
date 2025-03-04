@@ -17,8 +17,8 @@ const Inter = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Tenryuu",
-  description: "Tenryuu official online shop.",
+  title: "Exercise",
+  description: "Exercise for Dataweb Group",
   icons: { icon: "/" },
 };
 

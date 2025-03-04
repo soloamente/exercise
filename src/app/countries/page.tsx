@@ -1,17 +1,17 @@
-import DataTable from "@/components/data-table";
+import CountriesTable from "@/components/countries-table";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Exercise | User fetch",
-  description: "Exercise for Dataweb Group",
+  title: "Exercise | Countries",
+  description: "Countries data from REST Countries API",
   icons: { icon: "/" },
 };
 
-export default function HomePage() {
+export default function CountriesPage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
       <div className="flex flex-col gap-10 px-8">
-        <DataTable />
+        <CountriesTable />
       </div>
     </main>
   );

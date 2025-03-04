@@ -52,6 +52,7 @@ import {
 } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 import { AnimatedNumber } from "./ui/animated-number";
+import Image from "next/image";
 
 type Country = {
   name: {
@@ -87,7 +88,7 @@ const columns: ColumnDef<Country>[] = [
     cell: ({ row }) => {
       const flags = row.getValue<Country["flags"]>("flags");
       return (
-        <img
+        <Image
           src={flags.png}
           alt={flags.alt ?? `Flag of ${row.original.name.common}`}
           className="h-6 w-auto"

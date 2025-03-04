@@ -52,6 +52,7 @@ import {
 } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 import { AnimatedNumber } from "./ui/animated-number";
+import Image from "next/image";
 
 type Crypto = {
   id: string;
@@ -108,7 +109,7 @@ const columns: ColumnDef<Crypto>[] = [
     accessorKey: "name",
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
-        <img
+        <Image
           src={row.original.image}
           alt={`${row.getValue("name")} logo`}
           className="h-6 w-6"

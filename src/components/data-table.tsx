@@ -83,6 +83,8 @@ import {
 } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 import { AnimatedNumber } from "./ui/animated-number";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 
 type Item = {
   id: string;
@@ -116,8 +118,11 @@ const columns: ColumnDef<Item>[] = [
     header: "Name",
     accessorKey: "name",
     cell: ({ row }) => (
-      <div className="font-medium">{row.getValue("name")}</div>
+      <div className="font-medium" data-oid="pffsd3b">
+        {row.getValue("name")}
+      </div>
     ),
+
     size: 180,
     filterFn: multiColumnFilterFn,
     enableHiding: true,
@@ -126,8 +131,11 @@ const columns: ColumnDef<Item>[] = [
     header: "Username",
     accessorKey: "username",
     cell: ({ row }) => (
-      <div className="font-medium">{row.getValue("username")}</div>
+      <div className="font-medium" data-oid="r-_mopo">
+        {row.getValue("username")}
+      </div>
     ),
+
     size: 180,
     filterFn: multiColumnFilterFn,
     enableHiding: true,
@@ -144,7 +152,7 @@ const columns: ColumnDef<Item>[] = [
     cell: ({ row }) => {
       const address = row.getValue<Item["address"]>("address");
       return (
-        <div>
+        <div data-oid="7e:mky:">
           {`${address.street}, ${address.suite}, ${address.city}, ${address.zipcode}`}
         </div>
       );
@@ -159,7 +167,7 @@ const columns: ColumnDef<Item>[] = [
     header: "Phone",
     accessorKey: "phone",
     cell: ({ row }) => (
-      <Badge variant={"outline"} className={"font-medium"}>
+      <Badge variant={"outline"} className={"font-medium"} data-oid="chr1o1d">
         {row.getValue("phone")}
       </Badge>
     ),
@@ -170,7 +178,7 @@ const columns: ColumnDef<Item>[] = [
     accessorFn: (row: Item) => row.company,
     cell: ({ row }) => {
       const company = row.getValue<Item["company"]>("company");
-      return <div>{company.name}</div>;
+      return <div data-oid="g67pvhl">{company.name}</div>;
     },
     size: 90,
     filterFn: (row, columnId, value: string) => {
@@ -186,7 +194,7 @@ export default function DataTable() {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 5,
+    pageSize: 10,
   });
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -213,6 +221,25 @@ export default function DataTable() {
       }
     }
     void fetchPosts();
+  }, []);
+
+  // Set initial column visibility based on screen size
+  useEffect(() => {
+    const updateColumnVisibility = () => {
+      const isMobile = window.innerWidth < 768;
+      const isTablet = window.innerWidth < 1024;
+
+      setColumnVisibility({
+        username: !isMobile,
+        phone: !isMobile,
+        company: !isTablet,
+        address: !isTablet,
+      });
+    };
+
+    updateColumnVisibility();
+    window.addEventListener("resize", updateColumnVisibility);
+    return () => window.removeEventListener("resize", updateColumnVisibility);
   }, []);
 
   const handleDeleteRows = () => {
@@ -251,13 +278,14 @@ export default function DataTable() {
   useEffect(() => {
     setValue(number);
   }, [number]);
+
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col items-center justify-center">
       {/* Hero */}
-      <div className="mt-28 mb-40 flex w-full flex-row items-center justify-center gap-3 text-4xl uppercase">
-        <Users height={36} width={"auto"} />
+      <div className="mt-16 mb-20 flex w-full flex-row items-center justify-center gap-3 text-2xl uppercase sm:mt-28 sm:mb-40 sm:text-4xl">
+        <Users height={36} width={36} />
         <AnimatedNumber
-          className="text-4xl"
+          className="text-2xl sm:text-4xl"
           springOptions={{
             bounce: 0,
             duration: 2000,
@@ -265,11 +293,10 @@ export default function DataTable() {
           value={value}
         />{" "}
         <p>Users Fetched</p>
-        <p>from JSONPlaceholder</p>
       </div>
-      <div className="space-y-4">
+      <div className="mb-20 flex flex-col items-center justify-center space-y-4">
         {/* Filters */}
-        <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-col flex-wrap items-center justify-between gap-3 sm:flex-row">
           <div className="flex items-center gap-3">
             {/* Filter by name or email */}
             <div className="relative">
@@ -290,6 +317,7 @@ export default function DataTable() {
                 type="text"
                 aria-label="Filter by name or email"
               />
+
               <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
                 <ListFilterIcon size={16} aria-hidden="true" />
               </div>
@@ -308,117 +336,12 @@ export default function DataTable() {
                 </button>
               )}
             </div>
-            {/* Filters */}
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outline">
-                  <FilterIcon
-                    className="-ms-1 opacity-60"
-                    size={16}
-                    aria-hidden="true"
-                  />
-                  Filters
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto min-w-36 p-3" align="start">
-                <div className="space-y-3">
-                  <div className="text-muted-foreground text-xs font-medium">
-                    Filters
-                  </div>
-                  <div className="space-y-3 text-sm">No filters set</div>
-                </div>
-              </PopoverContent>
-            </Popover>
-            {/* Toggle columns visibility */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline">
-                  <Columns3Icon
-                    className="-ms-1 opacity-60"
-                    size={16}
-                    aria-hidden="true"
-                  />
-                  View
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
-                {table
-                  .getAllColumns()
-                  .filter((column) => column.getCanHide())
-                  .map((column) => {
-                    return (
-                      <DropdownMenuCheckboxItem
-                        key={column.id}
-                        className="capitalize"
-                        checked={column.getIsVisible()}
-                        onCheckedChange={(value) =>
-                          column.toggleVisibility(!!value)
-                        }
-                        onSelect={(event) => event.preventDefault()}
-                      >
-                        {column.id}
-                      </DropdownMenuCheckboxItem>
-                    );
-                  })}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          <div className="flex items-center gap-3">
-            {/* Delete button */}
-            {table.getSelectedRowModel().rows.length > 0 && (
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button className="ml-auto" variant="outline">
-                    <TrashIcon
-                      className="-ms-1 opacity-60"
-                      size={16}
-                      aria-hidden="true"
-                    />
-                    Delete
-                    <span className="bg-background text-muted-foreground/70 -me-1 inline-flex h-5 max-h-full items-center rounded border px-1 font-[inherit] text-[0.625rem] font-medium">
-                      {table.getSelectedRowModel().rows.length}
-                    </span>
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <div className="flex flex-col gap-2 max-sm:items-center sm:flex-row sm:gap-4">
-                    <div
-                      className="flex size-9 shrink-0 items-center justify-center rounded-full border"
-                      aria-hidden="true"
-                    >
-                      <CircleAlertIcon className="opacity-80" size={16} />
-                    </div>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        Are you absolutely sure?
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action cannot be undone. This will permanently
-                        delete {table.getSelectedRowModel().rows.length}{" "}
-                        selected{" "}
-                        {table.getSelectedRowModel().rows.length === 1
-                          ? "row"
-                          : "rows"}
-                        .
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                  </div>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDeleteRows}>
-                      Delete
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            )}
           </div>
         </div>
 
         {/* Table */}
         <div className="bg-background overflow-hidden rounded-md border">
-          <Table className="table-fixed">
+          <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id} className="hover:bg-transparent">
@@ -429,7 +352,7 @@ export default function DataTable() {
                         style={{ width: `${header.getSize()}px` }}
                         className="h-11"
                       >
-                        {header.isPlaceholder ? null : header.column.getCanSort() ? (
+                        {header.isPlaceholder ? null : (
                           <div
                             className={cn(
                               header.column.getCanSort() &&
@@ -437,7 +360,6 @@ export default function DataTable() {
                             )}
                             onClick={header.column.getToggleSortingHandler()}
                             onKeyDown={(e) => {
-                              // Enhanced keyboard handling for sorting
                               if (
                                 header.column.getCanSort() &&
                                 (e.key === "Enter" || e.key === " ")
@@ -471,11 +393,6 @@ export default function DataTable() {
                               ),
                             }[header.column.getIsSorted() as string] ?? null}
                           </div>
-                        ) : (
-                          flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )
                         )}
                       </TableHead>
                     );
@@ -491,7 +408,7 @@ export default function DataTable() {
                     data-state={row.getIsSelected() && "selected"}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="last:py-0">
+                      <TableCell key={cell.id}>
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext(),
@@ -530,7 +447,7 @@ export default function DataTable() {
               <SelectTrigger id={id} className="w-fit whitespace-nowrap">
                 <SelectValue placeholder="Select number of results" />
               </SelectTrigger>
-              <SelectContent className="[&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2">
+              <SelectContent>
                 {[5, 10, 25, 50].map((pageSize) => (
                   <SelectItem key={pageSize} value={pageSize.toString()}>
                     {pageSize}
@@ -539,12 +456,10 @@ export default function DataTable() {
               </SelectContent>
             </Select>
           </div>
+
           {/* Page number information */}
           <div className="text-muted-foreground flex grow justify-end text-sm whitespace-nowrap">
-            <p
-              className="text-muted-foreground text-sm whitespace-nowrap"
-              aria-live="polite"
-            >
+            <p className="text-muted-foreground text-sm whitespace-nowrap">
               <span className="text-foreground">
                 {table.getState().pagination.pageIndex *
                   table.getState().pagination.pageSize +
@@ -571,7 +486,6 @@ export default function DataTable() {
           <div>
             <Pagination>
               <PaginationContent>
-                {/* First page button */}
                 <PaginationItem>
                   <Button
                     size="icon"
@@ -584,7 +498,6 @@ export default function DataTable() {
                     <ChevronFirstIcon size={16} aria-hidden="true" />
                   </Button>
                 </PaginationItem>
-                {/* Previous page button */}
                 <PaginationItem>
                   <Button
                     size="icon"
@@ -597,7 +510,6 @@ export default function DataTable() {
                     <ChevronLeftIcon size={16} aria-hidden="true" />
                   </Button>
                 </PaginationItem>
-                {/* Next page button */}
                 <PaginationItem>
                   <Button
                     size="icon"
@@ -610,7 +522,6 @@ export default function DataTable() {
                     <ChevronRightIcon size={16} aria-hidden="true" />
                   </Button>
                 </PaginationItem>
-                {/* Last page button */}
                 <PaginationItem>
                   <Button
                     size="icon"
@@ -627,6 +538,21 @@ export default function DataTable() {
             </Pagination>
           </div>
         </div>
+      </div>
+      <div className="flex flex-row items-center">
+        <p className="text-sm opacity-30">All data is fetched from</p>
+        <Button
+          variant={"link"}
+          className="m-0 p-0 opacity-30 transition-all duration-500 hover:opacity-100"
+        >
+          <Link
+            href={"https://jsonplaceholder.typicode.com/"}
+            target={"_blank"}
+          >
+            JSONPlaceholder
+          </Link>
+          <ArrowUpRight />
+        </Button>
       </div>
     </div>
   );

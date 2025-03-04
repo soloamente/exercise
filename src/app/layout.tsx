@@ -4,6 +4,7 @@ import { type Metadata } from "next";
 import localFont from "next/font/local";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Preferences } from "@/components/ui/preferences";
+import { ReactLenis } from "lenis/react";
 
 const ingramMono = localFont({
   src: "../../public/fonts/IngramMono-Regular.ttf",
@@ -30,11 +31,23 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning
       className={`${Inter.variable} ${ingramMono.variable} font-inter scroll-smooth`}
+      data-oid="vz18qdv"
     >
-      <body>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <Preferences />
-          {children}
+      <body data-oid="edp_72r">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          data-oid=".s8mcop"
+        >
+          <ReactLenis
+            root
+            options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}
+            data-oid="h5oq3s0"
+          >
+            <Preferences data-oid="sgozbwx" />
+            {children}
+          </ReactLenis>
         </ThemeProvider>
       </body>
     </html>

@@ -17,6 +17,7 @@ function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
       data-slot="pagination"
       className={cn("mx-auto flex w-full justify-center", className)}
       {...props}
+      data-oid="di5k7j5"
     />
   );
 }
@@ -30,12 +31,13 @@ function PaginationContent({
       data-slot="pagination-content"
       className={cn("flex flex-row items-center gap-1", className)}
       {...props}
+      data-oid="w9jl9-b"
     />
   );
 }
 
 function PaginationItem({ ...props }: React.ComponentProps<"li">) {
-  return <li data-slot="pagination-item" {...props} />;
+  return <li data-slot="pagination-item" {...props} data-oid="fuc.9xa" />;
 }
 
 type PaginationLinkProps = {
@@ -63,6 +65,7 @@ function PaginationLink({
         className,
       )}
       {...props}
+      data-oid="dubx.i_"
     />
   );
 }
@@ -77,9 +80,10 @@ function PaginationPrevious({
       size="default"
       className={cn("gap-1 px-2.5 sm:pe-4", className)}
       {...props}
+      data-oid="kq03t9s"
     >
-      <ChevronLeftIcon size={16} />
-      <span>Previous</span>
+      <ChevronLeftIcon size={16} data-oid="ja3n8dl" />
+      <span data-oid="4.gdf6a">Previous</span>
     </PaginationLink>
   );
 }
@@ -94,9 +98,10 @@ function PaginationNext({
       size="default"
       className={cn("gap-1 px-2.5 sm:ps-4", className)}
       {...props}
+      data-oid="l1.9ukp"
     >
-      <span>Next</span>
-      <ChevronRightIcon size={16} />
+      <span data-oid="5n8cguz">Next</span>
+      <ChevronRightIcon size={16} data-oid="62-ij3s" />
     </PaginationLink>
   );
 }
@@ -111,9 +116,12 @@ function PaginationEllipsis({
       data-slot="pagination-ellipsis"
       className={cn("flex size-9 items-center justify-center", className)}
       {...props}
+      data-oid="3l0lzto"
     >
-      <MoreHorizontalIcon size={16} />
-      <span className="sr-only">More pages</span>
+      <MoreHorizontalIcon size={16} data-oid=".8vayjh" />
+      <span className="sr-only" data-oid="y0uetfc">
+        More pages
+      </span>
     </span>
   );
 }

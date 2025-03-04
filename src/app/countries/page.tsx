@@ -9,9 +9,12 @@ export const metadata: Metadata = {
 
 export default function CountriesPage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center">
-      <div className="flex flex-col gap-10 px-8">
-        <CountriesTable />
+    <main
+      className="mb-64 flex min-h-screen flex-col items-center justify-center"
+      data-oid="zwr460b"
+    >
+      <div className="flex flex-col gap-10 px-8" data-oid="xbkbacy">
+        <CountriesTable data-oid="1e6:6nu" />
       </div>
     </main>
   );

@@ -13,6 +13,21 @@ const config = {
         hostname: "m.media-amazon.com",
         pathname: "/images/**",
       },
+      {
+        protocol: "https",
+        hostname: "upload.wikimedia.org",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "flagcdn.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "coin-images.coingecko.com",
+        pathname: "/**",
+      },
     ],
   },
 };

@@ -29,7 +29,10 @@ export function AnimatedNumber({
   }, [spring, value]);
 
   return (
-    <MotionComponent className={cn("tabular-nums", className)}>
+    <MotionComponent
+      className={cn("tabular-nums", className)}
+      data-oid="y_f_hkg"
+    >
       {display}
     </MotionComponent>
   );

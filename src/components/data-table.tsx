@@ -57,13 +57,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
+import type {
   ColumnDef,
   ColumnFiltersState,
   FilterFn,
   PaginationState,
   SortingState,
   VisibilityState,
+} from "@tanstack/react-table";
+import {
   flexRender,
   getCoreRowModel,
   getFacetedUniqueValues,
@@ -95,16 +97,25 @@ type Item = {
   name: string;
   username: string;
   email: string;
-  location: string;
+  address: {
+    street: string;
+    suite: string;
+    city: string;
+    zipcode: string;
+  };
   phone: string;
-  company: string;
+  company: {
+    name: string;
+    catchPhrase: string;
+    bs: string;
+  };
 };
 
 // Custom filter function for multi-column searching
-const multiColumnFilterFn: FilterFn<Item> = (row, columnId, filterValue) => {
+const multiColumnFilterFn: FilterFn<Item> = (row, columnId, value: string) => {
   const searchableRowContent =
     `${row.original.name} ${row.original.email}`.toLowerCase();
-  const searchTerm = (filterValue ?? "").toLowerCase();
+  const searchTerm = (value ?? "").toLowerCase();
   return searchableRowContent.includes(searchTerm);
 };
 
@@ -135,31 +146,26 @@ const columns: ColumnDef<Item>[] = [
     size: 180,
   },
   {
+    id: "address",
     header: "Location",
-    accessorKey: "address",
-    cell: ({ row }) => (
-      <div>
-        {typeof row.getValue("address") === "object"
-          ? `${row.getValue("address").street}, ${row.getValue("address").suite}, ${row.getValue("address").city}, ${row.getValue("address").zipcode}`
-          : row.getValue("address")}
-      </div>
-    ),
+    accessorFn: (row: Item) => row.address,
+    cell: ({ row }) => {
+      const address = row.getValue<Item["address"]>("address");
+      return (
+        <div>
+          {`${address.street}, ${address.suite}, ${address.city}, ${address.zipcode}`}
+        </div>
+      );
+    },
     size: 220,
-    // Add filtering for city
-    filterFn: (row, columnId, filterValue) => {
-      if (!filterValue) return true;
-      const address = row.getValue(columnId);
-      if (typeof address === "object") {
-        return address.city.toLowerCase().includes(filterValue.toLowerCase());
-      }
-      return false;
+    filterFn: (row, columnId, value: string) => {
+      const address = row.getValue<Item["address"]>(columnId);
+      return address.city.toLowerCase().includes(value.toLowerCase());
     },
   },
-
   {
     header: "Phone",
     accessorKey: "phone",
-
     cell: ({ row }) => (
       <Badge variant={"outline"} className={"font-medium"}>
         {row.getValue("phone")}
@@ -167,24 +173,17 @@ const columns: ColumnDef<Item>[] = [
     ),
   },
   {
+    id: "company",
     header: "Company",
-    accessorKey: "company",
-    cell: ({ row }) => (
-      <div>
-        {typeof row.getValue("company") === "object"
-          ? ` ${row.getValue("company").name}`
-          : row.getValue("company")}
-      </div>
-    ),
+    accessorFn: (row: Item) => row.company,
+    cell: ({ row }) => {
+      const company = row.getValue<Item["company"]>("company");
+      return <div>{company.name}</div>;
+    },
     size: 90,
-    // Add filtering for company name
-    filterFn: (row, columnId, filterValue) => {
-      if (!filterValue) return true;
-
-      const company = row.getValue(columnId);
-      if (typeof company === "object") {
-        return company.name.toLowerCase().includes(filterValue.toLowerCase());
-      }
+    filterFn: (row, columnId, value: string) => {
+      const company = row.getValue<Item["company"]>(columnId);
+      return company.name.toLowerCase().includes(value.toLowerCase());
     },
   },
 ];
@@ -209,11 +208,19 @@ export default function DataTable() {
   const [data, setData] = useState<Item[]>([]);
   useEffect(() => {
     async function fetchPosts() {
-      const res = await fetch("https://jsonplaceholder.typicode.com/users");
-      const data = await res.json();
-      setData(data);
+      try {
+        const res = await fetch("https://jsonplaceholder.typicode.com/users");
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        const fetchedData = (await res.json()) as Item[];
+        setData(fetchedData);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+        setData([]);
+      }
     }
-    fetchPosts();
+    void fetchPosts();
   }, []);
 
   const handleDeleteRows = () => {

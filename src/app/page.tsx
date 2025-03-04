@@ -9,10 +9,10 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <main
-      className="flex min-h-screen flex-col items-center justify-center p-8"
+      className="flex min-h-screen flex-col items-center justify-center p-8 transition-all duration-700"
       data-oid="w4duqt1"
     >
-      <div className="my-40" data-oid="00kjx0r">
+      <div className="mb-20" data-oid="00kjx0r">
         <h1 className="text-3xl text-balance uppercase" data-oid="hijk48-">
           Choose a page
         </h1>

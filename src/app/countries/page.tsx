@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function CountriesPage() {
   return (
     <main
-      className="mb-64 flex min-h-screen flex-col items-center justify-center"
+      className="mb-64 flex min-h-screen flex-col items-center justify-center transition-all duration-700"
       data-oid="zwr460b"
     >
       <div className="flex flex-col gap-10 px-8" data-oid="xbkbacy">

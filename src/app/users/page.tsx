@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <main
-      className="mb-64 flex min-h-screen flex-col items-center justify-center"
+      className="mb-64 flex min-h-screen flex-col items-center justify-center transition-all duration-700"
       data-oid="lt_e7hg"
     >
       <div className="flex flex-col gap-10 px-8" data-oid=".iwj:gp">

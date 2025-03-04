@@ -77,7 +77,7 @@ export default function HomeNav() {
   const id = useId();
 
   return (
-    <div
+    <main
       className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2"
       data-oid="k-:u81v"
     >
@@ -149,6 +149,6 @@ export default function HomeNav() {
           </motion.div>
         </Link>
       ))}
-    </div>
+    </main>
   );
 }

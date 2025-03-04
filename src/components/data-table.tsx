@@ -280,7 +280,7 @@ export default function DataTable() {
   }, [number]);
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center">
+    <main className="flex min-h-screen flex-col items-center justify-center">
       {/* Hero */}
       <div className="mt-16 mb-20 flex w-full flex-row items-center justify-center gap-3 text-2xl uppercase sm:mt-28 sm:mb-40 sm:text-4xl">
         <Users height={36} width={36} />
@@ -554,6 +554,6 @@ export default function DataTable() {
           <ArrowUpRight />
         </Button>
       </div>
-    </div>
+    </main>
   );
 }

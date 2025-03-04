@@ -85,6 +85,13 @@ const multiColumnFilterFn: FilterFn<Country> = (
   return searchableRowContent.includes(searchTerm);
 };
 
+const formatLargeNumber = (num: number) => {
+  return new Intl.NumberFormat("en-US", {
+    notation: "compact",
+    maximumFractionDigits: 2,
+  }).format(num);
+};
+
 const columns: ColumnDef<Country>[] = [
   {
     header: "Flag",
@@ -95,15 +102,15 @@ const columns: ColumnDef<Country>[] = [
         <Image
           src={flags.png}
           alt={flags.alt ?? `Flag of ${row.original.name.common}`}
-          className="h-6 w-auto"
+          className="h-6 w-6"
           width={24}
           height={24}
           data-oid="02y9j9t"
         />
       );
     },
-    size: 80,
-    enableSorting: false,
+    size: 70,
+    enableHiding: true,
   },
   {
     header: "Name",
@@ -111,11 +118,9 @@ const columns: ColumnDef<Country>[] = [
     id: "name",
     cell: ({ row }) => {
       return (
-        <div data-oid="upsa0sj">
-          <div className="font-medium" data-oid="g9b12.o">
-            {row.original.name.common}
-          </div>
-          <div className="text-muted-foreground text-sm" data-oid="ycpt4mg">
+        <div data-oid="g9b12.o">
+          <div className="font-medium">{row.original.name.common}</div>
+          <div className="text-muted-foreground text-sm">
             {row.original.name.official}
           </div>
         </div>
@@ -129,35 +134,38 @@ const columns: ColumnDef<Country>[] = [
     accessorKey: "capital",
     cell: ({ row }) => {
       const capitals = row.getValue<string[]>("capital");
-      return <div data-oid="kh.f0:n">{capitals?.[0] ?? "N/A"}</div>;
+      return <div className="font-medium">{capitals?.[0] ?? "N/A"}</div>;
     },
     size: 150,
+    enableHiding: true,
   },
   {
     header: "Region",
     accessorKey: "region",
-    cell: ({ row }) => <div data-oid="htvmn0y">{row.getValue("region")}</div>,
+    cell: ({ row }) => (
+      <div className="font-medium">{row.getValue("region")}</div>
+    ),
     size: 120,
   },
   {
     header: "Subregion",
     accessorKey: "subregion",
     cell: ({ row }) => (
-      <div data-oid="ogxa75i">{row.getValue("subregion") ?? "N/A"}</div>
+      <div className="font-medium">{row.getValue("subregion") ?? "N/A"}</div>
     ),
-
     size: 150,
+    enableHiding: true,
   },
   {
     header: "Population",
     accessorKey: "population",
     cell: ({ row }) => (
-      <div data-oid="m34tnp2">
-        {new Intl.NumberFormat().format(row.getValue("population"))}
+      <div className="font-medium">
+        {formatLargeNumber(row.getValue("population"))}
       </div>
     ),
-
     size: 120,
+    enableHiding: true,
   },
 ];
 
@@ -235,6 +243,25 @@ export default function CountriesTable() {
     setValue(data.length);
   }, [data.length]);
 
+  // Set initial column visibility based on screen size
+  useEffect(() => {
+    const updateColumnVisibility = () => {
+      const isMobile = window.innerWidth < 768;
+      const isTablet = window.innerWidth < 1024;
+
+      setColumnVisibility({
+        flag: !isMobile,
+        capital: !isMobile,
+        subregion: !isTablet,
+        population: !isTablet,
+      });
+    };
+
+    updateColumnVisibility();
+    window.addEventListener("resize", updateColumnVisibility);
+    return () => window.removeEventListener("resize", updateColumnVisibility);
+  }, []);
+
   return (
     <div
       className="flex min-h-screen flex-col items-center justify-center"
@@ -242,12 +269,12 @@ export default function CountriesTable() {
     >
       {/* Hero */}
       <div
-        className="mt-28 mb-40 flex w-full flex-row items-center justify-center gap-3 text-4xl uppercase"
+        className="mt-16 mb-20 flex w-full flex-row items-center justify-center gap-3 text-2xl uppercase sm:mt-28 sm:mb-40 sm:text-4xl"
         data-oid="lzevuls"
       >
         <GlobeIcon height={36} width={36} data-oid="xbbblsb" />
         <AnimatedNumber
-          className="text-4xl"
+          className="text-2xl sm:text-4xl"
           springOptions={{
             bounce: 0,
             duration: 2000,
@@ -287,7 +314,7 @@ export default function CountriesTable() {
         >
           {/* Filters */}
           <div
-            className="flex flex-wrap items-center justify-between gap-3"
+            className="flex flex-col flex-wrap items-center justify-between gap-3 sm:flex-row"
             data-oid="6ukkyrb"
           >
             <div className="flex items-center gap-3" data-oid="tn9mso3">

@@ -286,8 +286,8 @@ export default function CryptoTable() {
   }, []);
 
   return (
-    <div
-      className="flex min-h-screen flex-col items-center justify-center"
+    <main
+      className="flex min-h-screen flex-col items-center justify-center transition-all duration-700"
       data-oid="in0y0zm"
     >
       {/* Hero */}
@@ -647,6 +647,6 @@ export default function CryptoTable() {
           <ArrowUpRight />
         </Button>
       </div>
-    </div>
+    </main>
   );
 }

@@ -5,6 +5,7 @@ import localFont from "next/font/local";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Preferences } from "@/components/ui/preferences";
 import { ReactLenis } from "lenis/react";
+import Navbar from "@/components/ui/navbar";
 
 const ingramMono = localFont({
   src: "../../public/fonts/IngramMono-Regular.ttf",
@@ -46,6 +47,7 @@ export default function RootLayout({
             data-oid="h5oq3s0"
           >
             <Preferences data-oid="sgozbwx" />
+            <Navbar />
             {children}
           </ReactLenis>
         </ThemeProvider>

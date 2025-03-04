@@ -96,7 +96,10 @@ export default function PostsGrid() {
   }, [data.length]);
 
   return (
-    <div className="flex min-h-screen flex-col" data-oid="pbzwc0p">
+    <main
+      className="flex min-h-screen flex-col transition-all duration-700"
+      data-oid="pbzwc0p"
+    >
       {/* Hero */}
       <div
         className="mt-16 mb-20 flex w-full flex-row items-center justify-center gap-3 text-2xl uppercase sm:mt-28 sm:mb-40 sm:text-4xl"
@@ -319,6 +322,6 @@ export default function PostsGrid() {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

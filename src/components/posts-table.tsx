@@ -98,30 +98,30 @@ export default function PostsGrid() {
   return (
     <div className="flex min-h-screen flex-col">
       {/* Hero */}
-      <div className="mt-28 mb-40 flex w-full flex-row items-center justify-center gap-3 text-4xl uppercase">
+      <div className="mt-16 mb-20 flex w-full flex-row items-center justify-center gap-3 text-2xl uppercase sm:mt-28 sm:mb-40 sm:text-4xl">
         <FileTextIcon height={36} width={"auto"} />
         <AnimatedNumber
-          className="text-4xl"
+          className="text-2xl sm:text-4xl"
           springOptions={{
             bounce: 0,
             duration: 2000,
           }}
           value={value}
         />{" "}
-        <p>Posts Fetched</p>
-        <p>from JSONPlaceholder</p>
+        <p>Posts</p>
+        <p className="hidden sm:block">from JSONPlaceholder</p>
       </div>
 
       <div className="space-y-8">
         {/* Filters */}
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
+        <div className="flex flex-col flex-wrap items-center justify-between gap-4 sm:flex-row">
+          <div className="w-full sm:w-auto">
             {/* Search input */}
             <div className="relative">
               <Input
                 id={`${id}-input`}
                 ref={inputRef}
-                className="peer min-w-60 ps-9"
+                className="peer w-full min-w-[300px] ps-9"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search posts..."
@@ -136,18 +136,18 @@ export default function PostsGrid() {
 
           {/* Cards per page selector */}
           <div className="flex items-center gap-3">
-            <Label htmlFor={id} className="max-sm:sr-only">
+            <Label htmlFor={id} className="whitespace-nowrap">
               Cards per page
             </Label>
             <Select
               value={pageSize.toString()}
               onValueChange={(value) => {
                 setPageSize(Number(value));
-                setCurrentPage(0); // Reset to first page when changing page size
+                setCurrentPage(0);
               }}
             >
-              <SelectTrigger id={id} className="w-fit whitespace-nowrap">
-                <SelectValue placeholder="Select number of cards" />
+              <SelectTrigger id={id} className="w-[100px]">
+                <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
                 {[6, 9, 12, 15].map((size) => (
@@ -161,11 +161,13 @@ export default function PostsGrid() {
         </div>
 
         {/* Grid of Cards */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
           {currentData.map((post) => (
-            <Card key={post.id} className="flex min-w-[300px] flex-col">
-              <CardHeader>
-                <CardTitle className="line-clamp-2">{post.title}</CardTitle>
+            <Card key={post.id} className="flex h-full flex-col">
+              <CardHeader className="flex-none">
+                <CardTitle className="line-clamp-2 text-xl">
+                  {post.title}
+                </CardTitle>
                 <CardDescription className="flex items-center gap-2">
                   <UserIcon size={14} />
                   User {post.userId}
@@ -181,9 +183,9 @@ export default function PostsGrid() {
         </div>
 
         {/* Pagination */}
-        <div className="flex items-center justify-between gap-8">
+        <div className="flex flex-col items-center justify-between gap-4 sm:flex-row sm:gap-8">
           {/* Page information */}
-          <div className="text-muted-foreground flex grow text-sm">
+          <div className="text-muted-foreground order-2 text-center text-sm sm:order-1 sm:text-left">
             <p>
               Showing{" "}
               <span className="text-foreground font-medium">
@@ -198,7 +200,7 @@ export default function PostsGrid() {
           </div>
 
           {/* Pagination buttons */}
-          <div>
+          <div className="order-1 sm:order-2">
             <Pagination>
               <PaginationContent>
                 <PaginationItem>

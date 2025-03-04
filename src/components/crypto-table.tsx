@@ -103,6 +103,7 @@ const columns: ColumnDef<Crypto>[] = [
       <div className="text-center">{row.getValue("market_cap_rank")}</div>
     ),
     size: 70,
+    enableHiding: true,
   },
   {
     header: "Coin",
@@ -111,7 +112,9 @@ const columns: ColumnDef<Crypto>[] = [
       <div className="flex items-center gap-2">
         <Image
           src={row.original.image}
-          alt={`${row.getValue("name")} logo`}
+          alt={`${row.getValue<string>("name")} logo`}
+          width={24}
+          height={24}
           className="h-6 w-6"
         />
         <div>
@@ -154,6 +157,7 @@ const columns: ColumnDef<Crypto>[] = [
       );
     },
     size: 100,
+    enableHiding: true,
   },
   {
     header: "Volume",
@@ -164,6 +168,7 @@ const columns: ColumnDef<Crypto>[] = [
       </div>
     ),
     size: 150,
+    enableHiding: true,
   },
   {
     header: "Market Cap",
@@ -174,6 +179,7 @@ const columns: ColumnDef<Crypto>[] = [
       </div>
     ),
     size: 150,
+    enableHiding: true,
   },
 ];
 
@@ -239,13 +245,32 @@ export default function CryptoTable() {
     setValue(data.length);
   }, [data.length]);
 
+  // Set initial column visibility based on screen size
+  useEffect(() => {
+    const updateColumnVisibility = () => {
+      const isMobile = window.innerWidth < 768;
+      const isTablet = window.innerWidth < 1024;
+
+      setColumnVisibility({
+        market_cap_rank: !isMobile,
+        price_change_percentage_24h: !isMobile,
+        total_volume: !isTablet,
+        market_cap: !isTablet,
+      });
+    };
+
+    updateColumnVisibility();
+    window.addEventListener("resize", updateColumnVisibility);
+    return () => window.removeEventListener("resize", updateColumnVisibility);
+  }, []);
+
   return (
     <div className="flex min-h-screen flex-col">
       {/* Hero */}
-      <div className="mt-28 mb-40 flex w-full flex-row items-center justify-center gap-3 text-4xl uppercase">
+      <div className="mt-16 mb-20 flex w-full flex-row items-center justify-center gap-3 text-2xl uppercase sm:mt-28 sm:mb-40 sm:text-4xl">
         <CoinsIcon height={36} width={"auto"} />
         <AnimatedNumber
-          className="text-4xl"
+          className="text-2xl sm:text-4xl"
           springOptions={{
             bounce: 0,
             duration: 2000,
@@ -253,12 +278,12 @@ export default function CryptoTable() {
           value={value}
         />{" "}
         <p>Cryptocurrencies</p>
-        <p>from CoinGecko</p>
+        <p className="hidden sm:block">from CoinGecko</p>
       </div>
 
       <div className="space-y-4">
         {/* Filters */}
-        <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-col flex-wrap items-center justify-between gap-3 sm:flex-row">
           <div className="flex items-center gap-3">
             {/* Filter by name or symbol */}
             <div className="relative">

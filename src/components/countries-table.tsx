@@ -90,7 +90,7 @@ const columns: ColumnDef<Country>[] = [
       return (
         <Image
           src={flags.png}
-          alt={flags.alt ?? `Flag of ${row.original.name.common}`}
+          alt={flags.alt ?? `Flag of ${row.getValue<string>("name.common")}`}
           className="h-6 w-auto"
         />
       );

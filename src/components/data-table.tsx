@@ -139,7 +139,6 @@ const columns: ColumnDef<Item>[] = [
     accessorKey: "address",
     cell: ({ row }) => (
       <div>
-        <span className="text-lg leading-none">{row.original.flag}</span>{" "}
         {typeof row.getValue("address") === "object"
           ? `${row.getValue("address").street}, ${row.getValue("address").suite}, ${row.getValue("address").city}, ${row.getValue("address").zipcode}`
           : row.getValue("address")}
